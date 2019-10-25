@@ -75,11 +75,12 @@ class PuzzleNumbers(object):
 
 # 判断游戏是否成功
     def if_success(self):
-        if self.puzzle_blocks[self.zero_row][self.zero_column] != (3,3):
+        if (self.zero_row, self.zero_column) != (3, 3):
             return False
         for row in range(4):
             for column in range(4):
-                if self.puzzle_blocks[row][column] != 4 * row + column + 1:
+                if self.puzzle_blocks[row][column] != 0 and \
+                        self.puzzle_blocks[row][column] != 4 * row + column + 1:
                     return False
         return True
 # 移动数字
