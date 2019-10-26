@@ -149,8 +149,8 @@ class GUICLI(GameGUI):
 class SlidePuzzle():
     def __init__(self, height=4, width=4):
         self.board = Board(height, width)
-        # self.gui = GUIPygame(self.board)
-        self.gui = GUICLI(self.board)
+        self.gui = GUIPygame(self.board)
+        # self.gui = GUICLI(self.board)
 
     def is_win(self):
         return self.board.is_ordered()
@@ -217,7 +217,7 @@ class PlayerCLI(Player):
                 if not self.game.board.is_valid_move(move):
                     raise Exception('Invalid move.')
                 return move
-            except as err:
+            except Exception as err:
                 print('WRONG INPUT!')
 
 
@@ -239,8 +239,8 @@ class PlayerRandom(Player):
 if __name__ == '__main__':
     game = SlidePuzzle()
     game.init()
-    # player = PlayerPygameKB(game)
-    player = PlayerRandom(game)
+    player = PlayerPygameKB(game)
+    # player = PlayerRandom(game)
     # player = PlayerCLI(game)
     while not game.is_win():
         move = player.choose_move()
