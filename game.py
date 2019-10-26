@@ -5,6 +5,8 @@ import random
 import sys
 import time
 
+pygame.init()
+
 
 class MOVE(enum.Enum):
     UP = 0
@@ -100,7 +102,7 @@ class GameGUI():
 class GUIPygame(GameGUI):
     def __init__(self, board):
         super().__init__(board)
-        pygame.init()
+
         self.window = pygame.display.set_mode((400, 400))
         self.font_obj = pygame.font.Font(None, 50)
 
@@ -147,8 +149,8 @@ class GUICLI(GameGUI):
 class SlidePuzzle():
     def __init__(self, height=4, width=4):
         self.board = Board(height, width)
-        self.gui = GUIPygame(self.board)
-        # self.gui = GUICLI(self.board)
+        # self.gui = GUIPygame(self.board)
+        self.gui = GUICLI(self.board)
 
     def is_win(self):
         return self.board.is_ordered()
@@ -157,6 +159,8 @@ class SlidePuzzle():
         self.gui.draw_initial_game()
 
     def do_move(self, move):
+        if move is None:
+            sys.exit(0)
         self.board.move(move)
         self.gui.draw_move(move)
 
@@ -180,7 +184,7 @@ class PlayerPygameKB(Player):
         while True:
             event = pygame.event.wait()
             if event.type == pygame.QUIT:
-                sys.exit()
+                return None
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     move = MOVE.UP
@@ -196,11 +200,35 @@ class PlayerPygameKB(Player):
                     return move
 
 
+class PlayerCLI(Player):
+    def __init__(self, game):
+        super().__init__(game)
+
+    def choose_move(self) -> MOVE:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None
+        while True:
+            try:
+                inp = input('Input position (0-UP 1-DOWN 2-LEFT 3-RIGHT 9-EXIT): \n')
+                if inp == '9':
+                    return None
+                move = MOVE(int(inp))
+                if not self.game.board.is_valid_move(move):
+                    raise Exception()
+                return move
+            except:
+                print('WRONG INPUT!')
+
+
 class PlayerRandom(Player):
     def __init__(self, game):
         super().__init__(game)
 
     def choose_move(self) -> MOVE:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None
         time.sleep(1)
         while True:
             move = MOVE(random.randint(0, len(MOVE)-1))
@@ -213,6 +241,7 @@ if __name__ == '__main__':
     game.init()
     # player = PlayerPygameKB(game)
     player = PlayerRandom(game)
+    # player = PlayerCLI(game)
     while not game.is_win():
         move = player.choose_move()
         game.do_move(move)
