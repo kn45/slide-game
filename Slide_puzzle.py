@@ -1,6 +1,7 @@
 # _*_coding:utf -8 _*_
 import pygame
 import sys
+import time
 import random
 from enum import Enum
 
@@ -109,12 +110,13 @@ class PuzzleNumbers(object):
 if __name__ == '__main__':
     PuzzleGame = PuzzleNumbers()
 # 游戏主体循环部分
+    #time.sleep(10)
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                PuzzleGame.KeyPressed()
+        event = pygame.event.wait()
+        if event.type == pygame.QUIT:
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            PuzzleGame.KeyPressed()
         pygame.display.update()
 
 
