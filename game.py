@@ -215,9 +215,9 @@ class PlayerCLI(Player):
                     return None
                 move = MOVE(int(inp))
                 if not self.game.board.is_valid_move(move):
-                    raise Exception()
+                    raise Exception('Invalid move.')
                 return move
-            except:
+            except as err:
                 print('WRONG INPUT!')
 
 
