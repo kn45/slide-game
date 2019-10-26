@@ -108,7 +108,6 @@ class GUIPygame(GameGUI):
         pygame.display.set_caption('slide puzzle')
         self.window.fill((184, 200, 255))
         self._redraw_all()
-        pygame.display.flip()
 
     def draw_move(self, move):
         self._redraw_all()
@@ -126,6 +125,7 @@ class GUIPygame(GameGUI):
                     # blit : draw one image onto another
                     self.window.blit(number_block, (j * 100 + 30, i * 100 + 30))
         pygame.display.update()
+        pygame.event.pump()
 
 
 class GUICLI(GameGUI):
@@ -215,6 +215,6 @@ if __name__ == '__main__':
     player = PlayerRandom(game)
     while not game.is_win():
         move = player.choose_move()
-        print(move)
         game.do_move(move)
+        pass
     game.do_win()
